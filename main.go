@@ -1,11 +1,19 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"blog_go/internal/routers"
+	"net/http"
+	"time"
+)
 
 func main() {
-	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"msg": "Hello"})
-	})
-	r.Run()
+	router := routers.NewRouter()
+	s := &http.Server{
+		Addr:           ":8080",
+		Handler:        router,
+		ReadTimeout:    time.Second * 10,
+		WriteTimeout:   time.Second * 10,
+		MaxHeaderBytes: 1 << 20,
+	}
+	s.ListenAndServe()
 }
